@@ -84,10 +84,6 @@ Run the application in development mode:
 dotnet run
 ```
 
-## Endpoints
-### Authentication
-- **POST /api/auth/login**: Authenticate and retrieve JWT.
-
 ### Inquiries
 - **GET /api/inquiry**: Get all inquiries.
 - **GET /api/inquiry/{id}**: Get a specific inquiry by ID.
