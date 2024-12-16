@@ -57,7 +57,7 @@ PublicInquiriesAPI/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/public-inquiries-api.git
+   git clone https://github.com/ataraFrieman/LayeredArchitectureProject
    cd public-inquiries-api
    ```
 
