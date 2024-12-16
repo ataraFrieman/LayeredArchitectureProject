@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublicInquiriesAPI.Models;
 using PublicInquiriesAPI.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace PublicInquiriesAPI.Controllers
 {

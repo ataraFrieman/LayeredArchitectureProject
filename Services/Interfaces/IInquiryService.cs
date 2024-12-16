@@ -1,6 +1,4 @@
 using PublicInquiriesAPI.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PublicInquiriesAPI.Services.Interfaces
 {
@@ -8,7 +6,7 @@ namespace PublicInquiriesAPI.Services.Interfaces
     {
         Task<List<Inquiry>> GetAllInquiriesAsync();
         Task<Inquiry> GetInquiryByIdAsync(int id);
-        Task CreateInquiryAsync(Inquiry inquiry);
+        Task CreateInquiryAsync(Inquiry inquiry, List<IFormFile> attachments);
         Task DeleteInquiryAsync(int id);
     }
 }

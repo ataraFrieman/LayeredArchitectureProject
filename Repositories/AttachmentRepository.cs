@@ -2,9 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using PublicInquiriesAPI.Data;
 using PublicInquiriesAPI.Models;
 using PublicInquiriesAPI.Repositories.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PublicInquiriesAPI.Utils.Exceptions;
+
 
 namespace PublicInquiriesAPI.Repositories
 {
@@ -34,5 +33,37 @@ namespace PublicInquiriesAPI.Repositories
             _context.Attachments.RemoveRange(attachments);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Attachment> GetByIdAsync(int id)
+        {
+            var attachment = await _context.Attachments.FindAsync(id);
+
+            if (attachment == null)
+            {
+                throw new NotFoundException($"attachment with ID {id} not found.");
+            }
+            return attachment;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var attachment = await _context.Attachments.FindAsync(id);
+            if (attachment != null)
+            {
+                var inquiry = await _context.Inquiries
+                                            .Include(i => i.Attachments)
+                                            .FirstOrDefaultAsync(i => i.Id == attachment.InquiryId);
+
+                if (inquiry != null)
+                {
+                    inquiry.Attachments.Remove(attachment);
+                }
+
+                _context.Attachments.Remove(attachment);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
     }
 }

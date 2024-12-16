@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Http;
 using PublicInquiriesAPI.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PublicInquiriesAPI.Services.Interfaces
 {
@@ -10,5 +8,6 @@ namespace PublicInquiriesAPI.Services.Interfaces
         Task<List<Attachment>> GetAttachmentsByInquiryIdAsync(int inquiryId);
         Task<Attachment> UploadAttachmentAsync(IFormFile file, int inquiryId);
         Task DeleteAttachmentAsync(int id);
+        Task DeleteAttachmentsByInquiryIdAsync(int inquiryId);
     }
 }

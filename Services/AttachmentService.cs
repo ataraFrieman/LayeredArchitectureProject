@@ -1,11 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using PublicInquiriesAPI.Models;
 using PublicInquiriesAPI.Repositories.Interfaces;
 using PublicInquiriesAPI.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+
 
 namespace PublicInquiriesAPI.Services
 {
@@ -68,6 +64,11 @@ namespace PublicInquiriesAPI.Services
             }
 
             await _attachmentRepository.DeleteByInquiryIdAsync(inquiryId);
+        }
+
+        public async Task DeleteAttachmentAsync(int id)
+        {
+            await _attachmentRepository.DeleteAsync(id);
         }
     }
 }

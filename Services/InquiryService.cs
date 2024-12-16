@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Http;
 using PublicInquiriesAPI.Models;
 using PublicInquiriesAPI.Repositories.Interfaces;
 using PublicInquiriesAPI.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using PublicInquiriesAPI.Utils.Exceptions;
+
 
 namespace PublicInquiriesAPI.Services
 {
@@ -20,9 +19,7 @@ namespace PublicInquiriesAPI.Services
 
        public async Task<List<Inquiry>> GetAllInquiriesAsync()
         {
-           List<Inquiry> inquiries = context.Inquiries
-                .Include(i => i.Attachments) 
-                .ToListAsync();
+            List<Inquiry> inquiries = await _inquiryRepository.GetAllAsync();
 
             if (inquiries == null || inquiries.Count == 0)
             {

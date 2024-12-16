@@ -1,6 +1,4 @@
 using PublicInquiriesAPI.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PublicInquiriesAPI.Repositories.Interfaces
 {

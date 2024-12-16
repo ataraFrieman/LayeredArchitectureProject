@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PublicInquiriesAPI.Utils.Exceptions;
 using System;
 using System.Net;
@@ -10,19 +10,17 @@ namespace PublicInquiriesAPI.Middleware
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlingMiddleware> _logger;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
+        public ErrorHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task Invoke(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await _next(context); 
             }
             catch (Exception ex)
             {
@@ -30,53 +28,46 @@ namespace PublicInquiriesAPI.Middleware
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
+            // הגדרת ברירת מחדל
+            var statusCode = HttpStatusCode.InternalServerError;
+            var errorResponse = new ErrorResponse
+            {
+                StatusCode = (int)statusCode,
+                Message = "An unexpected error occurred."
+            };
 
             switch (exception)
             {
-                case CustomException customException:
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    await WriteResponseAsync(context, customException.Message);
-                    break;
-
                 case NotFoundException notFoundException:
-                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    await WriteResponseAsync(context, notFoundException.Message);
+                    statusCode = HttpStatusCode.NotFound;
+                    errorResponse.Message = notFoundException.Message;
                     break;
-
-                case UnauthorizedException unauthorizedException:
-                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    await WriteResponseAsync(context, unauthorizedException.Message);
-                    break;
-
                 case ValidationException validationException:
-                    context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
-                    await WriteResponseAsync(context, validationException.Message);
+                    statusCode = HttpStatusCode.BadRequest;
+                    errorResponse.Message = validationException.Message;
                     break;
-
-                case Microsoft.EntityFrameworkCore.DbUpdateException dbUpdateException:
-                    context.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
-                    _logger.LogError(dbUpdateException, "Database update failed.");
-                    await WriteResponseAsync(context, "Database error occurred. Please try again later.");
+                case UnauthorizedException unauthorizedException:
+                    statusCode = HttpStatusCode.Unauthorized;
+                    errorResponse.Message = unauthorizedException.Message;
                     break;
-
                 default:
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    _logger.LogError(exception, "An unexpected error occurred.");
-                    await WriteResponseAsync(context, "An unexpected error occurred. Please try again later.");
+                    Console.WriteLine($"Unhandled exception: {exception.Message}");
                     break;
             }
-        }
 
-        private Task WriteResponseAsync(HttpContext context, string message)
-        {
-            return context.Response.WriteAsync(new
-            {
-                error = message,
-                statusCode = context.Response.StatusCode
-            }.ToString());
+            context.Response.StatusCode = (int)statusCode;
+            context.Response.ContentType = "application/json";
+
+            var response = JsonConvert.SerializeObject(errorResponse);
+            return context.Response.WriteAsync(response);
         }
+    }
+
+    public class ErrorResponse
+    {
+        public int StatusCode { get; set; }
+        public string? Message { get; set; }
     }
 }

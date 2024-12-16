@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "PublicInquiriesAPI": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:54130;http://localhost:54131"
+    }
+  }
+}
