@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using PublicInquiriesAPI.Models;
 using PublicInquiriesAPI.Utils.Exceptions;
 using System;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace PublicInquiriesAPI.Middleware
 {
@@ -65,9 +64,4 @@ namespace PublicInquiriesAPI.Middleware
         }
     }
 
-    public class ErrorResponse
-    {
-        public int StatusCode { get; set; }
-        public string? Message { get; set; }
-    }
 }
