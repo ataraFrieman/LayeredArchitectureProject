@@ -1,0 +1,43 @@
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+out/
+*.log
+
+# Database
+*.mdf
+*.ldf
+
+# Dependency folders
+node_modules/
+wwwroot/attachments/
+
+# Config files
+appsettings.json
+appsettings.*.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDE specific files
+.idea/
+*.tsscache
+
+# Backup files
+*.bak
+*.swp
+*.swo
+
+# Secrets (use appsettings.json for production settings)
+secrets.json
